@@ -15,12 +15,15 @@ Requires following packages:
 ### Usage
 
 ```
+predict_on_audio.py: Melody extraction on a audio file.
+The output will be .txt file of time(s) and frequency(Hz)
+
 usage: predict_on_audio.py [-h] [-fp FILEPATH] [-t MODEL_TYPE]
                            [-gpu GPU_INDEX] [-o OUTPUT_DIR] [-e EVALUATE]
 
 optional arguments:
   -h
-  -fp filepath            Path to input audio (default: train01.wav)
+  -fp filepath            Path to input audio(.wav) (default: train01.wav)
   -t model_type           Model type: vocal or melody (default: vocal)
   -gpu gpu_index          Assign a gpu index for processing.
                           It will run with cpu if None. (default: 0)
@@ -32,6 +35,9 @@ optional arguments:
 ```
 
 ```
+evaluate.py: Evaluate our result on three dataset: ADC2004, MIREX05, MedleyDB
+The output will be .csv file of evaluation metrics(mir_eval).
+
 usage: evaluate.py [-h] [-dd DATA_DIR] [-t MODEL_TYPE] [-gpu GPU_INDEX]
                    [-o OUTPUT_DIR] [-ds DATASET]
 optional arguments:
