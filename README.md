@@ -25,7 +25,7 @@ optional arguments:
   -gpu gpu_index          Assign a gpu index for processing.
                           It will run with cpu if None. (default: 0)
   -o output_dir           Path to output folder (default: ./output/)
-  -e evaluate             Path of ground truth (default: None)
+  -e evaluate             Path to ground-truth (default: None)
 ```
 
 ### Todos
