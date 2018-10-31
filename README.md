@@ -13,8 +13,9 @@ Requires following packages:
 - pysondfile
 
 ### Usage
-#### predict_on_audio.py: Melody extraction on a audio file.
-#### The output will be .txt file of time(s) and frequency(Hz).
+#### predict_on_audio.py
+Melody extraction on a audio file.
+The output will be .txt file of time(s) and frequency(Hz).
 ```
 usage: predict_on_audio.py [-h] [-fp FILEPATH] [-t MODEL_TYPE]
                            [-gpu GPU_INDEX] [-o OUTPUT_DIR] [-e EVALUATE]
@@ -31,8 +32,9 @@ optional arguments:
                           fast mode: use sr=22050 and hop=512 (faster)
                           std mode : use sr=native_sample_rate and hop=256 (more accurate)
 ```
-#### evaluate.py: Evaluate our result on three dataset: ADC2004, MIREX05, MedleyDB
-#### The output will be .csv file of evaluation metrics(mir_eval).
+#### evaluate.py
+Evaluate our result on three dataset: ADC2004, MIREX05, MedleyDB
+The output will be .csv file of evaluation metrics(mir_eval).
 ```
 usage: evaluate.py [-h] [-dd DATA_DIR] [-t MODEL_TYPE] [-gpu GPU_INDEX]
                    [-o OUTPUT_DIR] [-ds DATASET]
