@@ -3,15 +3,15 @@ import argparse
 import numpy as np
 from MSnet.MelodyExtraction import MeExt
 import os
-def main(filepath, model_type, output_dir, gpu_index, evaluate):
+def main(filepath, model_type, output_dir, gpu_index, evaluate, mode):
     songname = filepath.split('/')[-1].split('.')[0]
     model_path = './MSnet/pretrain_model/MSnet_'+str(model_type)
 
     if gpu_index is not None:
         with torch.cuda.device(gpu_index):
-            est_arr = MeExt(filepath, model_type=model_type, model_path=model_path, GPU=True)
+            est_arr = MeExt(filepath, model_type=model_type, model_path=model_path, GPU=True, mode=mode)
     else:
-        est_arr = MeExt(filepath, model_type=model_type, model_path=model_path, GPU=False)
+        est_arr = MeExt(filepath, model_type=model_type, model_path=model_path, GPU=False, mode=mode)
 
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
@@ -52,8 +52,11 @@ def parser():
     p.add_argument('-e', '--evaluate', 
                     help='Path of ground truth (default: %(default)s',
                     type=str, default=None)
+    p.add_argument('-m', '--mode', 
+                    help='The mode of CFP: std and fast (default: %(default)s',
+                    type=str, default='fast')
     return p.parse_args()
 if __name__ == '__main__':
     args = parser()
-    main(args.filepath, args.model_type, args.output_dir, args.gpu_index, args.evaluate)
+    main(args.filepath, args.model_type, args.output_dir, args.gpu_index, args.evaluate, args.mode)
 

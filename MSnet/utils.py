@@ -3,7 +3,7 @@ import mir_eval
 import numpy as np
 import pickle
 
-
+import pandas as pd
 def getlist_mdb():
     train = ["AimeeNorwich_Child", "AimeeNorwich_Flying", "AlexanderRoss_GoodbyeBolero", "AlexanderRoss_VelvetCurtain", "AvaLuna_Waterduct", "BigTroubles_Phantom", "CroqueMadame_Oil", "CroqueMadame_Pilot", "DreamersOfTheGhetto_HeavyLove", "EthanHein_1930sSynthAndUprightBass", "EthanHein_GirlOnABridge", "FacesOnFilm_WaitingForGa", "FamilyBand_Again", "Handel_TornamiAVagheggiar", "HeladoNegro_MitadDelMundo", "HopAlong_SisterCities", "JoelHelander_Definition", "JoelHelander_ExcessiveResistancetoChange", "JoelHelander_IntheAtticBedroom", "KarimDouaidy_Hopscotch", "KarimDouaidy_Yatora", "LizNelson_Coldwar", "LizNelson_ImComingHome", "LizNelson_Rainfall", "Meaxic_TakeAStep", "Meaxic_YouListen", "Mozart_BesterJungling", "MusicDelta_80sRock", "MusicDelta_Beatles", "MusicDelta_BebopJazz", "MusicDelta_Beethoven", "MusicDelta_Britpop", "MusicDelta_ChineseChaoZhou", "MusicDelta_ChineseDrama", "MusicDelta_ChineseHenan", "MusicDelta_ChineseJiangNan", "MusicDelta_ChineseXinJing", "MusicDelta_ChineseYaoZu", "MusicDelta_CoolJazz", "MusicDelta_Country1", "MusicDelta_Country2", "MusicDelta_Disco", "MusicDelta_FreeJazz", "MusicDelta_FunkJazz", "MusicDelta_GriegTrolltog", "MusicDelta_Grunge", "MusicDelta_Hendrix", "MusicDelta_InTheHalloftheMountainKing", "MusicDelta_LatinJazz", "MusicDelta_ModalJazz", "MusicDelta_Punk", "MusicDelta_Reggae", "MusicDelta_Rock", "MusicDelta_Rockabilly", "MusicDelta_Shadows", "MusicDelta_SpeedMetal", "MusicDelta_Vivaldi", "MusicDelta_Zeppelin", "PurlingHiss_Lolita", "Schumann_Mignon", "StevenClark_Bounty", "SweetLights_YouLetMeDown", "TheDistricts_Vermont", "TheScarletBrand_LesFleursDuMal", "TheSoSoGlos_Emergency", "Wolf_DieBekherte"]
     validation = ["AmarLal_Rest", "AmarLal_SpringDay1", "BrandonWebster_DontHearAThing", "BrandonWebster_YesSirICanFly", "ClaraBerryAndWooldog_AirTraffic", "ClaraBerryAndWooldog_Boys", "ClaraBerryAndWooldog_Stella", "ClaraBerryAndWooldog_TheBadGuys", "ClaraBerryAndWooldog_WaltzForMyVictims", "HezekiahJones_BorrowedHeart", "InvisibleFamiliars_DisturbingWildlife", "MichaelKropf_AllGoodThings", "NightPanther_Fire", "SecretMountains_HighHorse", "Snowmine_Curfews"]
@@ -39,6 +39,12 @@ def melody_eval(ref, est):
     OA = output_eval['Overall Accuracy']*100.0
     eval_arr = np.array([VR, VFA, RPA, RCA, OA])
     return eval_arr
+def csv2ref(ypath):
+    ycsv = pd.read_csv(ypath, names = ["time", "freq"])
+    gtt = ycsv['time'].values
+    gtf = ycsv['freq'].values
+    ref_arr = np.concatenate((gtt[:,None], gtf[:,None]), axis=1)
+    return ref_arr
 
 def select_vocal_track(ypath, lpath):
     

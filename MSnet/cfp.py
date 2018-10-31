@@ -234,9 +234,9 @@ def lognorm(x):
     return np.log(1+x)
 def norm(x):
     return (x - np.min(x))/(np.max(x)-np.min(x))
-def cfp_process(fpath, ypath=None, csv=False, hop=256, model_type='vocal'):
+def cfp_process(fpath, ypath=None, csv=False,sr=None, hop=256, model_type='vocal'):
     print('CFP process in '+str(fpath)+ ' ... (It may take some times)')
-    y, sr = load_audio(fpath)
+    y, sr = load_audio(fpath, sr=sr)
     if 'vocal' in model_type:
         Z, time, CenFreq, tfrL0, tfrLF, tfrLQ = feature_extraction(y, sr, Hop=hop, StartFreq=31.0, StopFreq=1250.0, NumPerOct=60)
     if 'melody' in model_type:
