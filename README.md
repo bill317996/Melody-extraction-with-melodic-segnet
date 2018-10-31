@@ -14,7 +14,7 @@ Requires following packages:
 
 ### Usage
 #### predict_on_audio.py
-Melody extraction on a audio file.
+Melody extraction on an audio file.
 The output will be .txt file of time(s) and frequency(Hz).
 ```
 usage: predict_on_audio.py [-h] [-fp FILEPATH] [-t MODEL_TYPE]
