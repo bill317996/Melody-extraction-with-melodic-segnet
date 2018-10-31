@@ -33,8 +33,8 @@ optional arguments:
                           std mode : use sr=native_sample_rate and hop=256 (more accurate)
 ```
 #### evaluate.py
-Evaluate our result on three dataset: ADC2004, MIREX05, MedleyDB
-The output will be .csv file of evaluation metrics(mir_eval).
+Evaluate our result on three dataset: ADC2004, MIREX05, MedleyDB.
+The output will be .csv file of evaluation metrics (mir_eval).
 ```
 usage: evaluate.py [-h] [-dd DATA_DIR] [-t MODEL_TYPE] [-gpu GPU_INDEX]
                    [-o OUTPUT_DIR] [-ds DATASET]
