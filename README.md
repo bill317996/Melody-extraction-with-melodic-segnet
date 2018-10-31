@@ -32,5 +32,6 @@ optional arguments:
 
  - Add codes for training_process
  - Add codes for training_data_manage
+ - Add figures for case-study
 
 ### Cleaning up codes and will upload it soon!
