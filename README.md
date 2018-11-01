@@ -1,6 +1,7 @@
 # Melody-extraction-with-melodic-segnet
 
 The source code of "A Streamlined Encoder/Decoder Architecture for Melody Extraction"
+- arxiv: https://arxiv.org/abs/1810.12947
 
 ### Dependencies
 
