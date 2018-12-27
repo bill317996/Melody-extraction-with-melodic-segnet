@@ -29,7 +29,7 @@ optional arguments:
                           It will run with cpu if None. (default: 0)
   -o output_dir           Path to output folder (default: ./output/)
   -e evaluate             Path to ground-truth (default: None)
-  -m mode                 The mode of CFP: std and fast (default: fast)
+  -m mode                 The mode of CFP: std and fast (default: std)
                           fast mode: use sr=22050 and hop=512 (faster)
                           std mode : use sr=native_sample_rate and hop=256 (more accurate)
 ```
