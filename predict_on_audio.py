@@ -54,7 +54,7 @@ def parser():
                     type=str, default=None)
     p.add_argument('-m', '--mode', 
                     help='The mode of CFP: std and fast (default: %(default)s',
-                    type=str, default='fast')
+                    type=str, default='std')
     return p.parse_args()
 if __name__ == '__main__':
     args = parser()
