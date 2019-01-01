@@ -12,6 +12,8 @@ Requires following packages:
 - numpy
 - scipy
 - pysoundfile
+- pandas
+
 
 ### Usage
 #### predict_on_audio.py
