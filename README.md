@@ -11,7 +11,7 @@ Requires following packages:
 - pytorch 0.4.1
 - numpy
 - scipy
-- pysondfile
+- pysoundfile
 
 ### Usage
 #### predict_on_audio.py
