@@ -47,14 +47,16 @@ def MeExt(filepath, model_type='vocal', model_path='./pretrain_model/MSnet_vocal
     else: 
         print("Error: Wrong type of model. Please assign model_type = 'vocal' or 'melody'")
         return None
-    if GPU:
-        Net.cuda()
-    else:
-        Net.cpu()
-
+    
     Net.float()
     Net.eval()
-    Net.load_state_dict(torch.load(model_path))
+    
+    if GPU:
+        Net.cuda()
+        Net.load_state_dict(torch.load(model_path, map_location={'cuda:2':'cuda:{}'.format(gid)}))
+    else:
+        Net.cpu()
+        Net.load_state_dict(torch.load(model_path, map_location=lambda storage, loc: storage))
 
     frames = data.shape[-1]
     if frames > 5120:
