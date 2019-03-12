@@ -45,7 +45,7 @@ def parser():
                     type=str, default='vocal')
     p.add_argument('-gpu', '--gpu_index',
                     help='Assign a gpu index for processing. It will run with cpu if None.  (default: %(default)s',
-                    type=int, default=0)
+                    type=int, default=None)
     p.add_argument('-o', '--output_dir',
                     help='Path to output folder (default: %(default)s',
                     type=str, default='./output/')
