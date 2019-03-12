@@ -36,7 +36,7 @@ def iseg(data, seg_frames_length=256):
     return x
 def MeExt(filepath, model_type='vocal', model_path='./pretrain_model/MSnet_vocal', GPU=True, mode='std'):
     if 'std' in mode:
-        data, CenFreq, time_arr = cfp_process(filepath, model_type=model_type)
+        data, CenFreq, time_arr = cfp_process(filepath, model_type=model_type, sr=44100, hop=256)
     elif 'fast' in mode:
         data, CenFreq, time_arr = cfp_process(filepath, model_type=model_type, sr=22050, hop=512)
     print('Melody extraction with Melodic Segnet ...')
