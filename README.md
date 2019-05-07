@@ -53,10 +53,29 @@ optional arguments:
                         Must be ADC2004 or MIREX05 or Mdb_vocal or Mdb_melody2 
 ```
 
-### Todos
+#### training.py
+Please prepare the h5py file for training data first from your audios by cfp_process 
+```
+usage: training.py [-h] [-fp FILEPATH] [-t MODEL_TYPE] [-gpu GPU_INDEX]
+                   [-o OUTPUT_DIR] [-ep EPOCH_NUM] [-lr LEARN_RATE]
+                   [-bs BATCH_SIZE]
 
- - Add codes for training_process
- - Add codes for training_data_manage
- - Add figures for case-study
-
-### Cleaning up codes and will upload it soon!
+optional arguments:
+  -h, --help            show this help message and exit
+  -fp FILEPATH, --filepath FILEPATH
+                        Path to input training data (h5py file) and validation
+                        data (pickle file) (default: ./train/data/)
+  -t MODEL_TYPE, --model_type MODEL_TYPE
+                        Model type: vocal or melody (default: vocal)
+  -gpu GPU_INDEX, --gpu_index GPU_INDEX
+                        Assign a gpu index for processing. It will run with
+                        cpu if None. (default: None)
+  -o OUTPUT_DIR, --output_dir OUTPUT_DIR
+                        Path to output folder (default: ./train/model/)
+  -ep EPOCH_NUM, --epoch_num EPOCH_NUM
+                        the number of epoch (default: 100)
+  -lr LEARN_RATE, --learn_rate LEARN_RATE
+                        the number of learn rate (default: 0.0001)
+  -bs BATCH_SIZE, --batch_size BATCH_SIZE
+                        The number of batch size (default: 50)
+```
