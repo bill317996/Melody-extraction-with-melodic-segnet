@@ -11,6 +11,7 @@ import torch.optim as optim
 import h5py
 import mir_eval
 import pickle
+from MSnet.cfp import get_CenFreq
 
 from MSnet.model import MSnet_vocal, MSnet_melody
 import argparse
@@ -36,8 +37,15 @@ def est(output, CenFreq, time_arr):
 
     for j in range(len(est_freq)):
         est_freq[j] = CenFreq[int(est_freq[j])]
+
+    if len(est_freq) != len(est_time):
+        new_length = min(len(est_freq), len(est_time))
+        est_freq = est_freq[:new_length]
+        est_time = est_time[:new_length]
+
         
     est_arr = np.concatenate((est_time[:,None],est_freq[:,None]),axis=1)
+
     return est_arr
 
 def melody_eval(ref, est):
@@ -65,13 +73,23 @@ def pos_weight(data):
     z = np.zeros((freq_len, frames))
     z[1:,:] += (non_vocal / vocal)
     z[0,:] += vocal / non_vocal
-    return torch.from_numpy(z).float().cuda()
+    return torch.from_numpy(z).float()
 
-def main(fp, model_type, gid, op, epoch_num, learn_rate, bs):
+def iseg(data):
+    print(data.shape)
+    new_length = data.shape[0] * data.shape[-1]
+    new_data = np.zeros((1,1,data.shape[2],new_length))
+    print(new_data.shape)
+    for i in range(len(data)):
+        new_data[0,0,:,i*data.shape[-1]:(i+1)*data.shape[-1]] = data[i]
+    return new_data
+def train(fp, model_type, gid, op, epoch_num, learn_rate, bs):
     if 'vocal' in model_type:
-        Net = model.MSnet_vocal()
+        Net = MSnet_vocal()
+        CenFreq = get_CenFreq(StartFreq=31.0, StopFreq=1250.0, NumPerOct=60)
     elif 'melody' in model_type:
-        Net = model.MSnet_melody()
+        Net = MSnet_melody()
+        CenFreq = get_CenFreq(StartFreq=20.0, StopFreq=2048.0, NumPerOct=60)
     if gid is not None:
         Net.cuda()
     else:
@@ -91,9 +109,11 @@ def main(fp, model_type, gid, op, epoch_num, learn_rate, bs):
     hf = h5py.File(fp+'/train.h5', 'r')
     x = hf.get('x')[:]
     y = hf.get('y')[:]
-    CenFreq = hf.get('CenFreq')[:]
-    time_arr = hf.get('time_arr')[:]
+
     hf.close()
+
+    print(x.shape)
+    print(y.shape)
 
     """
     Loading Validation data
@@ -104,7 +124,9 @@ def main(fp, model_type, gid, op, epoch_num, learn_rate, bs):
     with open(fp+'/val_y.pickle', 'rb') as file:
         y_test_list = pickle.load(file)
 
-    pw = pos_weight(all_gt)
+    pw = pos_weight(y)
+    if gid is not None:
+        pw = pw.cuda()
 
     x_tensor = torch.from_numpy(x).float()
     y_tensor = torch.from_numpy(y).float()
@@ -131,26 +153,44 @@ def main(fp, model_type, gid, op, epoch_num, learn_rate, bs):
             
         for step, (batch_x, batch_y) in enumerate(data_loader):
             opt.zero_grad()
-            pred = Net(batch_x.cuda())
-            loss = BCELoss(pred, batch_gt.cuda())
-            loss.backward()
-            opt.step()
-            train_loss += loss.item()
+            if gid is not None:
+                pred, _ = Net(batch_x.cuda())
+                pred = pred[:,0]
+                loss = BCELoss(pred, batch_y.cuda())
+                loss.backward()
+                opt.step()
+                train_loss += loss.item()
+            else:
+                pred, _ = Net(batch_x)
+                pred = pred[:,0]
+                loss = BCELoss(pred, batch_y)
+                loss.backward()
+                opt.step()
+                train_loss += loss.item()
+            
 
         Net.eval()
         avg_eval_arr = np.array([0,0,0,0,0],dtype='float64')
-        for i in range(len(x_test_list)):
-            x_test = x_test_list[i][None,:]
-            x_test = torch.from_numpy(x_test).float()
-            pred = Net(x_test.cuda())
-            pred = pred.cpu().detach().numpy()
-            
-            y_test = y_test_list[i]
+        with torch.no_grad():
+            for i in range(len(x_test_list)):
+                x_test = x_test_list[i]
+                print(x_test.shape)
+                x_test = torch.from_numpy(x_test).float()
+                if gid is not None:
+                    pred, _ = Net(x_test.cuda())
+                    pred = pred.cpu().detach().numpy()
+                else:
+                    pred, _ = Net(x_test)
+                    pred = pred.cpu().detach().numpy()
 
-            ref_arr = y_test
-            est_arr = est(pred, CenFreq, time_arr)
-            eval_arr = melody_eval(est_arr, ref_arr)
-            avg_eval_arr += eval_arr
+                pred = iseg(pred)
+                y_test = y_test_list[i]
+
+                ref_arr = y_test
+                time_arr = ref_arr[:,0]
+                est_arr = est(pred, CenFreq, time_arr)
+                eval_arr = melody_eval(est_arr, ref_arr)
+                avg_eval_arr += eval_arr
 
         avg_eval_arr /= len(x_test_list)
         print('=========================')
@@ -172,13 +212,13 @@ def parser():
 
     p.add_argument('-fp', '--filepath',
                     help='Path to input training data (h5py file) and validation data (pickle file) (default: %(default)s)',
-                    type=str, default='./train/data/')
+                    type=str, default='./data/')
     p.add_argument('-t', '--model_type',
                     help='Model type: vocal or melody (default: %(default)s)',
                     type=str, default='vocal')
     p.add_argument('-gpu', '--gpu_index',
                     help='Assign a gpu index for processing. It will run with cpu if None.  (default: %(default)s)',
-                    type=int, default=None)
+                    type=int, default=0)
     p.add_argument('-o', '--output_dir',
                     help='Path to output folder (default: %(default)s)',
                     type=str, default='./train/model/')
