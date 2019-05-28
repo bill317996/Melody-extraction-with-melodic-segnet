@@ -34,7 +34,7 @@ def iseg(data, seg_frames_length=256):
     for i in range(len(data)-1):
         x = np.concatenate((x, data[i+1]), axis=-1)
     return x
-def MeExt(filepath, model_type='vocal', model_path='./pretrain_model/MSnet_vocal', GPU=True, mode='std'):
+def MeExt(filepath, model_type='vocal', model_path='./pretrain_model/MSnet_vocal', GPU=True, mode='std', gid=0):
     if 'std' in mode:
         data, CenFreq, time_arr = cfp_process(filepath, model_type=model_type, sr=44100, hop=256)
     elif 'fast' in mode:
