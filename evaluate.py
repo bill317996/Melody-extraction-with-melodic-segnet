@@ -45,7 +45,7 @@ def main(data_dir, model_type, output_dir, gpu_index, dataset='Mdb_vocal'):
                
             if gpu_index is not None:
                 with torch.cuda.device(gpu_index):
-                    est_arr = MeExt(filepath, model_type=model_type, model_path=model_path, GPU=True, mode='std')
+                    est_arr = MeExt(filepath, model_type=model_type, model_path=model_path, GPU=True, mode='std', gid=gpu_index)
             else:
                 est_arr = MeExt(filepath, model_type=model_type, model_path=model_path, GPU=False, mode='std')
             # np.savetxt(output_dir+'/'+songname+'.txt', est_arr)
