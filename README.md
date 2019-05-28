@@ -52,9 +52,24 @@ optional arguments:
   -ds dataset           Dataset for evaluate (default: Mdb_vocal)
                         Must be ADC2004 or MIREX05 or Mdb_vocal or Mdb_melody2 
 ```
+#### data_arrangement.py
+Preparing data for training.
+```
+usage: data_arrangement.py [-h] [-df DATA_FOLDER] [-t MODEL_TYPE]
+                           [-o OUTPUT_FOLDER]
 
+optional arguments:
+  -h, --help            show this help message and exit
+  -df DATA_FOLDER, --data_folder DATA_FOLDER
+                        Path to the dataset folder (default:
+                        ./data/MedleyDB/Source/)
+  -t MODEL_TYPE, --model_type MODEL_TYPE
+                        Model type: vocal or melody (default: vocal
+  -o OUTPUT_FOLDER, --output_folder OUTPUT_FOLDER
+                        Path to output foler (default: ./data/)
+```
 #### training.py
-Please prepare the h5py file for training data first from your audios by cfp_process 
+Please prepare the h5py file by data_arrangement.py before training.
 ```
 usage: training.py [-h] [-fp FILEPATH] [-t MODEL_TYPE] [-gpu GPU_INDEX]
                    [-o OUTPUT_DIR] [-ep EPOCH_NUM] [-lr LEARN_RATE]
@@ -64,12 +79,12 @@ optional arguments:
   -h, --help            show this help message and exit
   -fp FILEPATH, --filepath FILEPATH
                         Path to input training data (h5py file) and validation
-                        data (pickle file) (default: ./train/data/)
+                        data (pickle file) (default: ./data/)
   -t MODEL_TYPE, --model_type MODEL_TYPE
                         Model type: vocal or melody (default: vocal)
   -gpu GPU_INDEX, --gpu_index GPU_INDEX
                         Assign a gpu index for processing. It will run with
-                        cpu if None. (default: None)
+                        cpu if None. (default: 0)
   -o OUTPUT_DIR, --output_dir OUTPUT_DIR
                         Path to output folder (default: ./train/model/)
   -ep EPOCH_NUM, --epoch_num EPOCH_NUM
