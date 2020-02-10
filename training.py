@@ -189,7 +189,7 @@ def train(fp, model_type, gid, op, epoch_num, learn_rate, bs):
                 ref_arr = y_test
                 time_arr = ref_arr[:,0]
                 est_arr = est(pred, CenFreq, time_arr)
-                eval_arr = melody_eval(est_arr, ref_arr)
+                eval_arr = melody_eval(ref_arr, est_arr)
                 avg_eval_arr += eval_arr
 
         avg_eval_arr /= len(x_test_list)
